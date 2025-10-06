@@ -13,9 +13,12 @@ function App() {
   const languageCode = languageCodes[selectedLanguage];
 
   useEffect(() => {
-    const savedPatients = localStorage.getItem('patients');
-    if (savedPatients) {
-      setPatients(JSON.parse(savedPatients));
+    // Ensure patient records are not persisted across page reloads.
+    // Clear any stored patients on mount so cards are removed after a reload.
+    try {
+      localStorage.removeItem('patients');
+    } catch (e) {
+      // ignore localStorage access errors
     }
 
     const savedLanguage = localStorage.getItem('language');
@@ -24,9 +27,7 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('patients', JSON.stringify(patients));
-  }, [patients]);
+  // Note: patients are intentionally kept in-memory only and not saved to localStorage.
 
   useEffect(() => {
     localStorage.setItem('language', selectedLanguage);
