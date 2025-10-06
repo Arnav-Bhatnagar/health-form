@@ -21,6 +21,33 @@ function PatientCard({ patient, t }) {
           <span className="value">{patient.ashaWorkerId}</span>
         </div>
 
+        {/* Mental & Emotional Health display */}
+        {(patient.stressLevel || patient.depressionAnxiety !== undefined || patient.sleepHours) && (
+          <div className="info-row">
+            <h4>{t.mentalHealthSectionTitle || 'Mental & Emotional Health'}:</h4>
+            {patient.stressLevel && (
+              <div className="info-row">
+                <span className="label">{t.stressLevel}:</span>
+                <span className="value">{patient.stressLevel}</span>
+              </div>
+            )}
+
+            {patient.depressionAnxiety !== undefined && (
+              <div className="info-row">
+                <span className="label">{t.depressionAnxiety}:</span>
+                <span className="value">{patient.depressionAnxiety ? t.yes : t.no}{patient.depressionAnxiety && patient.depressionAnxietyNotes ? `  ${patient.depressionAnxietyNotes}` : ''}</span>
+              </div>
+            )}
+
+            {patient.sleepHours && (
+              <div className="info-row">
+                <span className="label">{t.sleepPattern}:</span>
+                <span className="value">{patient.sleepHours} {t.hoursPerNight}{patient.sleepDisturbances ? `  ${patient.sleepDisturbances}` : ''}</span>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="info-row">
           <span className="label">{t.medicalHistory}:</span>
           <span className="value">{patient.medicalHistory}</span>

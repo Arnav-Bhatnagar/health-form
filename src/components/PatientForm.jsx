@@ -32,6 +32,12 @@ function PatientForm({ onSubmit, language, t }) {
     dailyMealPattern: '',
     sleepQuality: 'Average'
     ,
+  // Mental & Emotional Health
+  stressLevel: 'Moderate', // Low/Moderate/High
+  depressionAnxiety: false,
+  depressionAnxietyNotes: '',
+  sleepHours: '',
+  sleepDisturbances: '',
     // Medical History fields
     pastIllnesses: {
       diabetes: false,
@@ -93,6 +99,10 @@ function PatientForm({ onSubmit, language, t }) {
       ...formData,
       pastIllnesses: { ...formData.pastIllnesses, [illness]: e.target.checked }
     });
+  };
+
+  const handleDepAnxToggle = (e) => {
+    setFormData({ ...formData, depressionAnxiety: e.target.checked });
   };
 
   const handleImmunizationToggle = (vax) => (e) => {
@@ -237,6 +247,53 @@ function PatientForm({ onSubmit, language, t }) {
             placeholder={t.enterBloodPressure}
           />
         </div>
+      </div>
+
+      {/* Mental & Emotional Health section */}
+      <h3 className="section-heading">{t.mentalHealthSectionTitle || 'Mental & Emotional Health'}:</h3>
+
+      <div className="voice-input-field">
+        <label>{t.stressLevel}</label>
+        <div className="input-wrapper">
+          <select value={formData.stressLevel} onChange={handleChange('stressLevel')}>
+            <option value="Low">{t.low}</option>
+            <option value="Moderate">{t.moderate}</option>
+            <option value="High">{t.high}</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="voice-input-field">
+        <label>{t.depressionAnxiety}</label>
+        <div className="input-wrapper radio-group">
+          <label><input type="radio" name="depressionAnxiety" value={true} checked={formData.depressionAnxiety === true} onChange={handleDepAnxToggle} /> {t.yes}</label>
+          <label><input type="radio" name="depressionAnxiety" value={false} checked={formData.depressionAnxiety === false} onChange={(e) => setFormData({ ...formData, depressionAnxiety: false })} /> {t.no}</label>
+        </div>
+        {formData.depressionAnxiety && (
+          <VoiceInputField
+            label={t.depressionAnxietyNotes}
+            value={formData.depressionAnxietyNotes}
+            onChange={handleChange('depressionAnxietyNotes')}
+            placeholder={t.enterDepressionAnxietyNotes}
+            language={language}
+            listeningText={t.listening}
+          />
+        )}
+      </div>
+
+      <div className="voice-input-field">
+        <label>{t.sleepPattern}</label>
+        <div className="input-wrapper">
+          <input type="number" value={formData.sleepHours} onChange={handleChange('sleepHours')} placeholder={t.enterSleepHours} />
+        </div>
+        <VoiceInputField
+          label={t.sleepDisturbances}
+          value={formData.sleepDisturbances}
+          onChange={handleChange('sleepDisturbances')}
+          placeholder={t.enterSleepDisturbances}
+          language={language}
+          listeningText={t.listening}
+        />
       </div>
 
       {/* Medical History section */}
