@@ -26,6 +26,54 @@ function PatientCard({ patient, t }) {
           <span className="value">{patient.medicalHistory}</span>
         </div>
 
+        {/* Medical History display */}
+        {(patient.pastIllnesses && (patient.pastIllnesses.diabetes || patient.pastIllnesses.hypertension || patient.pastIllnesses.asthma || patient.pastIllnesses.tb || patient.pastIllnesses.covid || patient.pastIllnesses.other)) && (
+          <div className="info-row">
+            <span className="label">{t.pastIllnesses}:</span>
+            <span className="value">
+              {patient.pastIllnesses.diabetes ? `${t.diabetes}` : ''}
+              {patient.pastIllnesses.hypertension ? (patient.pastIllnesses.diabetes ? ', ' : '') + `${t.hypertension}` : ''}
+              {patient.pastIllnesses.asthma ? ((patient.pastIllnesses.diabetes || patient.pastIllnesses.hypertension) ? ', ' : '') + `${t.asthma}` : ''}
+              {patient.pastIllnesses.tb ? ((patient.pastIllnesses.diabetes || patient.pastIllnesses.hypertension || patient.pastIllnesses.asthma) ? ', ' : '') + `${t.tb}` : ''}
+              {patient.pastIllnesses.covid ? ((patient.pastIllnesses.diabetes || patient.pastIllnesses.hypertension || patient.pastIllnesses.asthma || patient.pastIllnesses.tb) ? ', ' : '') + `${t.covid}` : ''}
+              {patient.pastIllnesses.other ? ((patient.pastIllnesses.diabetes || patient.pastIllnesses.hypertension || patient.pastIllnesses.asthma || patient.pastIllnesses.tb || patient.pastIllnesses.covid) ? '  ' : '') + `${patient.pastIllnesses.other}` : ''}
+            </span>
+          </div>
+        )}
+
+        {patient.pastSurgeries && (
+          <div className="info-row">
+            <span className="label">{t.pastSurgeries}:</span>
+            <span className="value">{patient.pastSurgeries}</span>
+          </div>
+        )}
+
+        {patient.allergies && (
+          <div className="info-row">
+            <span className="label">{t.allergies}:</span>
+            <span className="value">{patient.allergies}</span>
+          </div>
+        )}
+
+        {patient.currentMedications && (
+          <div className="info-row">
+            <span className="label">{t.currentMedications}:</span>
+            <span className="value">{patient.currentMedications}</span>
+          </div>
+        )}
+
+        {(patient.immunizationHistory && (patient.immunizationHistory.tetanus || patient.immunizationHistory.hepatitis || patient.immunizationHistory.covid || patient.immunizationHistory.other)) && (
+          <div className="info-row">
+            <span className="label">{t.immunizationHistory}:</span>
+            <span className="value">
+              {patient.immunizationHistory.tetanus ? `${t.tetanus}` : ''}
+              {patient.immunizationHistory.hepatitis ? (patient.immunizationHistory.tetanus ? ', ' : '') + `${t.hepatitis}` : ''}
+              {patient.immunizationHistory.covid ? ((patient.immunizationHistory.tetanus || patient.immunizationHistory.hepatitis) ? ', ' : '') + `${t.covid}` : ''}
+              {patient.immunizationHistory.other ? ((patient.immunizationHistory.tetanus || patient.immunizationHistory.hepatitis || patient.immunizationHistory.covid) ? '  ' : '') + `${patient.immunizationHistory.other}` : ''}
+            </span>
+          </div>
+        )}
+
         {patient.height && (
           <div className="info-row">
             <span className="label">{t.height}:</span>

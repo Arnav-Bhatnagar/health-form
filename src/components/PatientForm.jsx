@@ -32,6 +32,24 @@ function PatientForm({ onSubmit, language, t }) {
     dailyMealPattern: '',
     sleepQuality: 'Average'
     ,
+    // Medical History fields
+    pastIllnesses: {
+      diabetes: false,
+      hypertension: false,
+      asthma: false,
+      tb: false,
+      covid: false,
+      other: ''
+    },
+    pastSurgeries: '',
+    allergies: '',
+    currentMedications: '',
+    immunizationHistory: {
+      tetanus: false,
+      hepatitis: false,
+      covid: false,
+      other: ''
+    },
     // Diagnostic & Treatment Tracking
     previousTestReports: [], // { dataUrl, name }
     previousTestResults: ''
@@ -67,6 +85,20 @@ function PatientForm({ onSubmit, language, t }) {
     setFormData({
       ...formData,
       symptoms: { ...formData.symptoms, [symptom]: e.target.checked }
+    });
+  };
+
+  const handlePastIllnessToggle = (illness) => (e) => {
+    setFormData({
+      ...formData,
+      pastIllnesses: { ...formData.pastIllnesses, [illness]: e.target.checked }
+    });
+  };
+
+  const handleImmunizationToggle = (vax) => (e) => {
+    setFormData({
+      ...formData,
+      immunizationHistory: { ...formData.immunizationHistory, [vax]: e.target.checked }
     });
   };
 
@@ -207,6 +239,72 @@ function PatientForm({ onSubmit, language, t }) {
         </div>
       </div>
 
+      {/* Medical History section */}
+      <h3 className="section-heading">{t.medicalHistorySectionTitle || t.medicalHistory}:</h3>
+
+      <div className="voice-input-field illnesses-group">
+        <label>{t.pastIllnesses}</label>
+        <div className="input-wrapper checkbox-group">
+          <label><input type="checkbox" checked={formData.pastIllnesses.diabetes} onChange={handlePastIllnessToggle('diabetes')} /> {t.diabetes}</label>
+          <label><input type="checkbox" checked={formData.pastIllnesses.hypertension} onChange={handlePastIllnessToggle('hypertension')} /> {t.hypertension}</label>
+          <label><input type="checkbox" checked={formData.pastIllnesses.asthma} onChange={handlePastIllnessToggle('asthma')} /> {t.asthma}</label>
+          <label><input type="checkbox" checked={formData.pastIllnesses.tb} onChange={handlePastIllnessToggle('tb')} /> {t.tb}</label>
+          <label><input type="checkbox" checked={formData.pastIllnesses.covid} onChange={handlePastIllnessToggle('covid')} /> {t.covid}</label>
+        </div>
+        <VoiceInputField
+          label={t.pastIllnessesOther}
+          value={formData.pastIllnesses.other}
+          onChange={(e) => setFormData({ ...formData, pastIllnesses: { ...formData.pastIllnesses, other: e.target.value } })}
+          placeholder={t.enterPastIllnessesOther}
+          language={language}
+          listeningText={t.listening}
+        />
+      </div>
+
+      <VoiceInputField
+        label={t.pastSurgeries}
+        value={formData.pastSurgeries}
+        onChange={handleChange('pastSurgeries')}
+        placeholder={t.enterPastSurgeries}
+        language={language}
+        listeningText={t.listening}
+      />
+
+      <VoiceInputField
+        label={t.allergies}
+        value={formData.allergies}
+        onChange={handleChange('allergies')}
+        placeholder={t.enterAllergies}
+        language={language}
+        listeningText={t.listening}
+      />
+
+      <VoiceInputField
+        label={t.currentMedications}
+        value={formData.currentMedications}
+        onChange={handleChange('currentMedications')}
+        placeholder={t.enterCurrentMedications}
+        language={language}
+        listeningText={t.listening}
+      />
+
+      <div className="voice-input-field immunization-group">
+        <label>{t.immunizationHistory}</label>
+        <div className="input-wrapper checkbox-group">
+          <label><input type="checkbox" checked={formData.immunizationHistory.tetanus} onChange={handleImmunizationToggle('tetanus')} /> {t.tetanus}</label>
+          <label><input type="checkbox" checked={formData.immunizationHistory.hepatitis} onChange={handleImmunizationToggle('hepatitis')} /> {t.hepatitis}</label>
+          <label><input type="checkbox" checked={formData.immunizationHistory.covid} onChange={handleImmunizationToggle('covid')} /> {t.covid}</label>
+        </div>
+        <VoiceInputField
+          label={t.immunizationOther}
+          value={formData.immunizationHistory.other}
+          onChange={(e) => setFormData({ ...formData, immunizationHistory: { ...formData.immunizationHistory, other: e.target.value } })}
+          placeholder={t.enterImmunizationOther}
+          language={language}
+          listeningText={t.listening}
+        />
+      </div>
+
       {/* Lifestyle section */}
       <h3 className="section-heading">{t.lifestyle}:</h3>
 
@@ -296,32 +394,9 @@ function PatientForm({ onSubmit, language, t }) {
 
      
 
-      <div className="voice-input-field">
-        <label>{t.medicalHistory}</label>
-        <div className="input-wrapper">
-          <textarea
-            value={formData.medicalHistory}
-            onChange={handleChange('medicalHistory')}
-            placeholder={t.enterMedicalHistory}
-            rows="4"
-          />
-        </div>
-      </div>
+     
 
-      <div className="voice-input-field">
-        <label>{t.medicalPhoto}</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handlePhotoChange}
-          className="file-input"
-        />
-        {photoPreview && (
-          <div className="photo-preview">
-            <img src={photoPreview} alt="Medical preview" />
-          </div>
-        )}
-      </div>
+     
 
       {/* Diagnostic & Treatment Tracking */}
       <h3 className="section-heading">{t.diagnosticTracking}:</h3>
