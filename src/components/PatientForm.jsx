@@ -8,7 +8,9 @@ function PatientForm({ onSubmit, language, t }) {
     medicalHistory: '',
     medicalPhoto: null,
     vaccineStatus: '',
-    temperature: '',
+    height: '',
+    weight: '',
+    bmi: '',
     bloodPressure: '',
     symptoms: {
       fever: false,
@@ -19,13 +21,46 @@ function PatientForm({ onSubmit, language, t }) {
     checkupDate: '',
     followUpRequired: false,
     notes: ''
+    ,
+    // Lifestyle fields
+    smoking: false,
+    smokingFrequency: '',
+    alcohol: false,
+    alcoholFrequency: '',
+    physicalActivity: 'Sedentary',
+    dietaryHabits: 'Mixed',
+    dailyMealPattern: '',
+    sleepQuality: 'Average'
+    ,
+    // Diagnostic & Treatment Tracking
+    previousTestReports: [], // { dataUrl, name }
+    previousTestResults: ''
   });
 
   const [photoPreview, setPhotoPreview] = useState(null);
+  const [testReportPreviews, setTestReportPreviews] = useState([]);
 
   const handleChange = (field) => (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormData({ ...formData, [field]: value });
+    let value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    // convert radio string 'true'/'false' to boolean
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
+    const next = { ...formData, [field]: value };
+
+    // compute BMI when height or weight changes
+    if (field === 'height' || field === 'weight') {
+      const h = parseFloat(field === 'height' ? value : next.height);
+      const w = parseFloat(field === 'weight' ? value : next.weight);
+      if (h > 0 && w > 0) {
+        const hMeters = h / 100;
+        const bmiVal = +(w / (hMeters * hMeters)).toFixed(1);
+        next.bmi = isFinite(bmiVal) ? String(bmiVal) : '';
+      } else {
+        next.bmi = '';
+      }
+    }
+
+    setFormData(next);
   };
 
   const handleSymptomToggle = (symptom) => (e) => {
@@ -47,6 +82,22 @@ function PatientForm({ onSubmit, language, t }) {
     }
   };
 
+  const handleTestReportsChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    const readers = files.map((file) =>
+      new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve({ dataUrl: reader.result, name: file.name });
+        reader.readAsDataURL(file);
+      })
+    );
+    Promise.all(readers).then((results) => {
+      setFormData({ ...formData, previousTestReports: results });
+      setTestReportPreviews(results);
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({
@@ -62,15 +113,30 @@ function PatientForm({ onSubmit, language, t }) {
       medicalHistory: '',
       medicalPhoto: null,
       vaccineStatus: '',
-      temperature: '',
+      height: '',
+      weight: '',
+      bmi: '',
       bloodPressure: '',
-      symptoms: { fever: false, cough: false, fatigue: false },
-      otherSymptoms: '',
-      checkupDate: '',
-      followUpRequired: false,
-      notes: ''
+  symptoms: { fever: false, cough: false, fatigue: false },
+  otherSymptoms: '',
+  checkupDate: '',
+  followUpRequired: false,
+  notes: ''
+  ,
+      smoking: false,
+      smokingFrequency: '',
+      alcohol: false,
+      alcoholFrequency: '',
+      physicalActivity: 'Sedentary',
+      dietaryHabits: 'Mixed',
+      dailyMealPattern: '',
+      sleepQuality: 'Average'
+      ,
+      previousTestReports: [],
+      previousTestResults: ''
     });
     setPhotoPreview(null);
+    setTestReportPreviews([]);
   };
 
   return (
@@ -98,16 +164,34 @@ function PatientForm({ onSubmit, language, t }) {
         listeningText={t.listening}
       />
 
+
+      <h3 className="section-heading">General Health Parameters:</h3>
+
+      <VoiceInputField
+      
+        label={t.height}
+        value={formData.height}
+        onChange={handleChange('height')}
+        type="number"
+        placeholder={t.enterHeight}
+        language={language}
+        listeningText={t.listening}
+      />
+
+      <VoiceInputField
+        label={t.weight}
+        value={formData.weight}
+        onChange={handleChange('weight')}
+        type="number"
+        placeholder={t.enterWeight}
+        language={language}
+        listeningText={t.listening}
+      />
+
       <div className="voice-input-field">
-        <label>{t.temperature}</label>
+        <label>{t.bmi}</label>
         <div className="input-wrapper">
-          <input
-            type="number"
-            step="0.1"
-            value={formData.temperature}
-            onChange={handleChange('temperature')}
-            placeholder={t.enterTemperature}
-          />
+          <input type="text" value={formData.bmi} readOnly placeholder={t.enterBMI} />
         </div>
       </div>
 
@@ -123,43 +207,94 @@ function PatientForm({ onSubmit, language, t }) {
         </div>
       </div>
 
+      {/* Lifestyle section */}
+      <h3 className="section-heading">{t.lifestyle}:</h3>
+
       <div className="voice-input-field">
-        <label>{t.symptoms}</label>
-        <div className="input-wrapper checkbox-group">
-          <label><input type="checkbox" checked={formData.symptoms.fever} onChange={handleSymptomToggle('fever')} /> {t.symptomFever}</label>
-          <label><input type="checkbox" checked={formData.symptoms.cough} onChange={handleSymptomToggle('cough')} /> {t.symptomCough}</label>
-          <label><input type="checkbox" checked={formData.symptoms.fatigue} onChange={handleSymptomToggle('fatigue')} /> {t.symptomFatigue}</label>
+        <label>{t.smoking}</label>
+        <div className="input-wrapper radio-group">
+          <label><input type="radio" name="smoking" value={true} checked={formData.smoking === true} onChange={handleChange('smoking')} /> {t.yes}</label>
+          <label><input type="radio" name="smoking" value={false} checked={formData.smoking === false} onChange={handleChange('smoking')} /> {t.no}</label>
+        </div>
+        {formData.smoking && (
+          <VoiceInputField
+            label={t.smokingFrequency}
+            value={formData.smokingFrequency}
+            onChange={handleChange('smokingFrequency')}
+            placeholder={t.enterSmokingFrequency}
+            language={language}
+            listeningText={t.listening}
+          />
+        )}
+      </div>
+
+      <div className="voice-input-field">
+        <label>{t.alcohol}</label>
+        <div className="input-wrapper radio-group">
+          <label><input type="radio" name="alcohol" value={true} checked={formData.alcohol === true} onChange={handleChange('alcohol')} /> {t.yes}</label>
+          <label><input type="radio" name="alcohol" value={false} checked={formData.alcohol === false} onChange={handleChange('alcohol')} /> {t.no}</label>
+        </div>
+        {formData.alcohol && (
+          <VoiceInputField
+            label={t.alcoholFrequency}
+            value={formData.alcoholFrequency}
+            onChange={handleChange('alcoholFrequency')}
+            placeholder={t.enterAlcoholFrequency}
+            language={language}
+            listeningText={t.listening}
+          />
+        )}
+      </div>
+
+      <div className="voice-input-field">
+        <label>{t.physicalActivity}</label>
+        <div className="input-wrapper">
+          <select value={formData.physicalActivity} onChange={handleChange('physicalActivity')}>
+            <option value="Sedentary">{t.sedentary}</option>
+            <option value="Moderate">{t.moderate}</option>
+            <option value="Active">{t.active}</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="voice-input-field">
+        <label>{t.dietaryHabits}</label>
+        <div className="input-wrapper">
+          <select value={formData.dietaryHabits} onChange={handleChange('dietaryHabits')}>
+            <option value="Veg">{t.veg}</option>
+            <option value="Non-Veg">{t.nonVeg}</option>
+            <option value="Mixed">{t.mixed}</option>
+          </select>
         </div>
       </div>
 
       <VoiceInputField
-        label={t.otherSymptoms}
-        value={formData.otherSymptoms}
-        onChange={handleChange('otherSymptoms')}
-        placeholder={t.enterOtherSymptoms}
+        label={t.dailyMealPattern}
+        value={formData.dailyMealPattern}
+        onChange={handleChange('dailyMealPattern')}
+        placeholder={t.enterDailyMealPattern}
         language={language}
         listeningText={t.listening}
       />
 
       <div className="voice-input-field">
-        <label>{t.checkupDate}</label>
+        <label>{t.sleepQuality}</label>
         <div className="input-wrapper">
-          <input type="date" value={formData.checkupDate} onChange={handleChange('checkupDate')} />
+          <select value={formData.sleepQuality} onChange={handleChange('sleepQuality')}>
+            <option value="Good">{t.good}</option>
+            <option value="Average">{t.average}</option>
+            <option value="Poor">{t.poor}</option>
+          </select>
         </div>
       </div>
 
-      <div className="voice-input-field followup">
-        <label>
-          <input type="checkbox" checked={formData.followUpRequired} onChange={handleChange('followUpRequired')} /> {t.followUpRequired}
-        </label>
-      </div>
+      
 
-      <div className="voice-input-field">
-        <label>{t.notes}</label>
-        <div className="input-wrapper">
-          <textarea value={formData.notes} onChange={handleChange('notes')} rows="3" />
-        </div>
-      </div>
+      
+
+      
+
+     
 
       <div className="voice-input-field">
         <label>{t.medicalHistory}</label>
@@ -187,6 +322,42 @@ function PatientForm({ onSubmit, language, t }) {
           </div>
         )}
       </div>
+
+      {/* Diagnostic & Treatment Tracking */}
+      <h3 className="section-heading">{t.diagnosticTracking}:</h3>
+
+      <div className="voice-input-field">
+        <label>{t.previousTestReports}</label>
+        <input
+          type="file"
+          accept="image/*,application/pdf"
+          multiple
+          onChange={handleTestReportsChange}
+          className="file-input"
+        />
+        {testReportPreviews && testReportPreviews.length > 0 && (
+          <div className="report-previews">
+            {testReportPreviews.map((r, idx) => (
+              <div key={idx} className="report-preview">
+                {typeof r.dataUrl === 'string' && r.dataUrl.startsWith('data:image') ? (
+                  <img src={r.dataUrl} alt={r.name} />
+                ) : (
+                  <a href={r.dataUrl} download={r.name}>{t.viewReport} — {r.name}</a>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <VoiceInputField
+        label={t.previousTestResults}
+        value={formData.previousTestResults}
+        onChange={handleChange('previousTestResults')}
+        placeholder={t.enterPreviousTestResults}
+        language={language}
+        listeningText={t.listening}
+      />
 
       <VoiceInputField
         label={t.vaccineStatus}
