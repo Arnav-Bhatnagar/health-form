@@ -33,6 +33,21 @@ export const translations = {
     enterMedicalHistory: 'Enter Medical History',
     enterVaccineStatus: 'Enter vaccine status',
     listening: 'Listening...'
+    ,
+    temperature: 'Temperature (°C)',
+    bloodPressure: 'Blood Pressure (mmHg)',
+    symptoms: 'Symptoms',
+    symptomFever: 'Fever',
+    symptomCough: 'Cough',
+    symptomFatigue: 'Fatigue',
+    otherSymptoms: 'Other Symptoms',
+    checkupDate: 'Next Checkup Date',
+    followUpRequired: 'Follow-up Required',
+    notes: 'Notes',
+    enterTemperature: 'Enter temperature',
+    enterBloodPressure: 'Enter blood pressure',
+    enterOtherSymptoms: 'Enter other symptoms',
+    enterCheckupDate: 'Select checkup date'
   },
   hi: {
     appTitle: 'रोगी सूचना प्रणाली',
@@ -68,6 +83,21 @@ export const translations = {
     enterMedicalHistory: 'चिकित्सा इतिहास दर्ज करें',
     enterVaccineStatus: 'टीका की स्थिति दर्ज करें',
     listening: 'सुन रहा है...'
+    ,
+    temperature: 'तापमान (°C)',
+    bloodPressure: 'रक्तचाप (mmHg)',
+    symptoms: 'लक्षण',
+    symptomFever: 'बुखार',
+    symptomCough: 'खाँसी',
+    symptomFatigue: 'थकान',
+    otherSymptoms: 'अन्य लक्षण',
+    checkupDate: 'अगली जांच की तिथि',
+    followUpRequired: 'फॉलो-अप आवश्यक',
+    notes: 'नोट्स',
+    enterTemperature: 'तापमान दर्ज करें',
+    enterBloodPressure: 'रक्तचाप दर्ज करें',
+    enterOtherSymptoms: 'अन्य लक्षण दर्ज करें',
+    enterCheckupDate: 'जांच की तिथि चुनें'
   },
   pa: {
     appTitle: 'ਮਰੀਜ਼ ਜਾਣਕਾਰੀ ਪ੍ਰਣਾਲੀ',
@@ -103,6 +133,21 @@ export const translations = {
     enterMedicalHistory: 'ਮੈਡੀਕਲ ਇਤਿਹਾਸ ਦਰਜ ਕਰੋ',
     enterVaccineStatus: 'ਵੈਕਸੀਨ ਸਥਿਤੀ ਦਰਜ ਕਰੋ',
     listening: 'ਸੁਣ ਰਿਹਾ ਹੈ...'
+    ,
+    temperature: 'ਤਾਪਮਾਨ (°C)',
+    bloodPressure: 'ਰਕਤ ਦਬਾਅ (mmHg)',
+    symptoms: 'ਲੱਛਣ',
+    symptomFever: 'ਬੁਖਾਰ',
+    symptomCough: 'ਖਾਂਸੀ',
+    symptomFatigue: 'ਥਕਾਵਟ',
+    otherSymptoms: 'ਹੋਰ ਲੱਛਣ',
+    checkupDate: 'ਅਗਲੀ ਜਾਂਚ ਦੀ ਤਾਰੀਖ',
+    followUpRequired: 'ਫਾਲੋਅਪ ਲੋੜੀਂਦਾ',
+    notes: 'ਨੋਟਸ',
+    enterTemperature: 'ਤਾਪਮਾਨ ਦਰਜ ਕਰੋ',
+    enterBloodPressure: 'ਰਕਤ ਦਬਾਅ ਦਰਜ ਕਰੋ',
+    enterOtherSymptoms: 'ਹੋਰ ਲੱਛਣ ਦਰਜ ਕਰੋ',
+    enterCheckupDate: 'ਜਾਂਚ ਦੀ ਤਾਰੀਖ ਚੁਣੋ'
   },
   te: {
     appTitle: 'రోగి సమాచార వ్యవస్థ',
@@ -138,6 +183,21 @@ export const translations = {
     enterMedicalHistory: 'వైద్య చరిత్రను నమోదు చేయండి',
     enterVaccineStatus: 'టీకా స్థితిని నమోదు చేయండి',
     listening: 'వింటోంది...'
+    ,
+    temperature: '\u0c24\u0c3e\u0c2a\u0c2e\u0c3e\u0c28 (\u00b0C)',
+    bloodPressure: '\u0c2c\u0c4d\u0c32\u0c4b\u0c21 \u0c2a\u0c4d\u200c\u0c30\u0c47\u0c37\u0c4d (mmHg)',
+    symptoms: '\u0c32\u0c4b\u0c17\u0c3f\u0c39\u0c41\u0c32\u0c4d',
+    symptomFever: '\u0c06\u0c35\u0c3e\u0c26\u0c3f',
+    symptomCough: '\u0c2a\u0c4a\u0c1f\u0c3f',
+    symptomFatigue: '\u0c2b\u0c3e\u0c15\u0c4d\u0c1f\u0c3f\u0c17\u0c4d',
+    otherSymptoms: '\u0c2f\u0c3e\u0c30\u0c41 \u0c32\u0c4b\u0c17\u0c3f\u0c39\u0c41\u0c32\u0c4d',
+    checkupDate: '\u0c2a\u0c4d\u0c30\u0c2f\u0c3e\u0c32\u0c4d\u0c15 \u0c1a\u0c3f\u0c32\u0c4d\u0c32\u0c3f\u0c15\u0c4d',
+    followUpRequired: '\u0c2b\u0c4a\u0c32\u0c4b-\u0c2a\u0c4d\u0c2f \u0c05\u0c15\u0c4d\u0c3b\u0c3f\u0c32\u0c4d',
+    notes: '\u0c28\u0c4b\u0c1f\u0c38\u0c4d',
+    enterTemperature: '\u0c24\u0c3e\u0c2a\u0c2e\u0c3e\u0c28 \u0c26\u0c30\u0c4d\u0c1c \u0c15\u0c30\u0c4b',
+    enterBloodPressure: '\u0c2c\u0c4d\u0c32\u0c4b\u0c21 \u0c2a\u0c4d\u200c\u0c30\u0c47\u0c37\u0c4d \u0c26\u0c30\u0c4d\u0c1c \u0c15\u0c30\u0c4b',
+    enterOtherSymptoms: '\u0c2f\u0c3e\u0c30\u0c41 \u0c32\u0c4b\u0c17\u0c3f\u0c39\u0c41\u0c32\u0c4d \u0c26\u0c30\u0c4d\u0c1c \u0c15\u0c30\u0c4b',
+    enterCheckupDate: '\u0c2a\u0c4d\u0c30\u0c2f\u0c3e\u0c32\u0c4d\u0c15 \u0c1a\u0c3f\u0c32\u0c4d\u0c32\u0c3f\u0c15\u0c4d \u0c1a\u0c41\u0c28\u0c4b'
   }
 };
 
